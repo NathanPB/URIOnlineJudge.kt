@@ -10,19 +10,38 @@ fun main(args: Array<String>) {
     val operators = listOf('^', '*', '/', '+', '-', '>', '<', '=', '#', '.', '|')
     val operands = "[a-zA-Z0-9]+".toRegex()
 
-    abstract class Expression
+    abstract class Expression {
+        abstract fun postfix(): String
+    }
     class OperandExpression(val left: Expression, val operator: Char, val right: Expression) : Expression() {
         override fun toString() = "exp($left $operator $right)"
+        override fun postfix() = "${left.postfix()}${right.postfix()}$operator"
     }
     class ConstantExpression(val value: String) : Expression() {
         override fun toString() = value
+        override fun postfix() = toString()
     }
 
     fun parseExpression(expression: String) : Expression {
         return if (expression.matches(operands)) {
             ConstantExpression(expression)
         } else {
-            if (expression.startsWith('(') && expression.endsWith(')')) {
+            val expressionCount = run {
+                var depth = 0
+                var expressionCount = 0
+                for (char in expression.toCharArray()) {
+                    if (char == '(') depth++
+                    if (char == ')')  {
+                        depth--
+                        if (depth == 0) {
+                            expressionCount++
+                        }
+                    }
+                }
+                expressionCount
+            }
+
+            if (expression.startsWith('(') && expression.endsWith(')') && expressionCount == 1) {
                 val startIndex = expression.indexOf('(')
 
                 val (_, endIndex) = expression
@@ -74,7 +93,7 @@ fun main(args: Array<String>) {
                 error("Lexical Error")
             }
 
-            println(parseExpression(expression))
+            println(parseExpression(expression).postfix())
         } catch (e: IllegalStateException) {
             println(e.message)
         }
