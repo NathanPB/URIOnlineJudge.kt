@@ -1,3 +1,5 @@
+package uri1083
+
 import java.util.*
 
 /*
@@ -69,16 +71,16 @@ fun main(args: Array<String>) {
                     if (depth == 0) {
                         val operator = operators.firstOrNull(it::equals)
                         if (operator != null) {
-                            return@mapIndexedNotNull index as Int?
+                            return@mapIndexedNotNull index
                         }
                     }
-                    return@mapIndexedNotNull null as Int?
-                }.maxByOrNull { operators.indexOf(expression[it]) } ?: error("Syntactical Error")
+                    return@mapIndexedNotNull null
+                }.maxByOrNull { operators.indexOf(expression[it]) } ?: error("Syntax Error!")
 
                 val left = expression.take(index)
                 val right = expression.substring(index + 1)
                 if (left.isBlank() || right.isBlank()) {
-                    error("Syntactical Error")
+                    error("Syntax Error!")
                 }
                 OperandExpression(parseExpression(left), expression[index], parseExpression(right))
             }
@@ -90,7 +92,7 @@ fun main(args: Array<String>) {
         val expression = scanner.nextLine().replace(" ", "")
         try {
             if (!expression.all { it == '(' || it == ')' || it in operators || it.toString().matches(operands) }) {
-                error("Lexical Error")
+                error("Lexical Error!")
             }
 
             println(parseExpression(expression).postfix())
