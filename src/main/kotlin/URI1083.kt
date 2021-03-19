@@ -2,12 +2,12 @@ import java.util.*
 
 /*
  * This algorithm still doesn't pass in the URI platform, but it parses the entire expression into an expression tree.
- * TODO: format the tree to postfix format and print
+ * TODO: fix the postfix formatter
  */
 
 fun main(args: Array<String>) {
     val scanner = Scanner(System.`in`)
-    val operators = listOf('^', '*', '/', '+', '-', '>', '<', '=', '#', '.', '|')
+    val operators = listOf('^', '/', '*', '-', '+', '#', '+', '<', '>', '.', '|')
     val operands = "[a-zA-Z0-9]+".toRegex()
 
     abstract class Expression {
